@@ -1,0 +1,327 @@
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+class ttt{
+
+public:
+
+  int choice_player_1;
+  int choice_player_2;
+  int pieces_on_board = 0;
+  bool game_over = false;
+  bool player_1_wins_check = false;
+  bool player_1_wins = false;
+  bool player_2_wins_check = false;
+  bool player_2_wins = false;
+  bool tie = false;
+  
+ // in C++ you have to declare variables before use
+  
+  
+
+  vector<char> board = {8, ' '};
+
+
+
+    void greeting(){
+
+        cout << "TIC TAC TOE" << "\n";
+        cout << "===========" << "\n";
+        cout << "           " << "\n";
+        
+        cout << "  "<<"1"<<" | "<<"2"<<"  | "<<"3" << "\n";
+        cout << " --------------------------------"<< "\n";
+        cout << "  "<<"4"<<" | "<<"5"<<"  | "<<"6" << "\n";
+        cout << " --------------------------------"<< "\n";
+        cout << "  "<<"7"<<" | "<<"8"<<"  | "<<"9" << "\n" << "\n";
+        
+        cout << "Type 1-9 to place your X piece, player 1" << "\n";
+        cout << "Type 1-9 to place your O piece, player 2" << "\n";
+
+    };
+
+
+    void clear_screen(){
+
+        for(int x = 0; x < 9;x++){ //make board free
+
+             board[x] = ' ';
+
+            }
+    };
+
+    void player_1_prompt(){
+        
+        //check board
+        did_anyone_win();
+        cout << "Player 1 start, place Your X on the screen. To place your piece: Type a number 1-9 then press enter." << "\n";
+        
+        cin >> choice_player_1;
+        //check move, if good, place, if not request 
+        board[choice_player_1 - 1] = 'X';
+    };
+    
+    
+    
+	void player_2_prompt(){
+        
+        did_anyone_win();
+        cout << "Player 2 start, place your O on the screen. To place your piece: Type a number 1-9 then press enter." << "\n";
+        cin >> choice_player_2;
+        board[choice_player_2 - 1] = 'O';
+	};
+		
+
+
+    void display_board(){ 
+
+        cout << "  "<<board[0]<<" | "<<board[1]<<" | "<<board[2]<< "\n";
+        cout << " --------------------------------"<< "\n";
+        cout << "  "<<board[3]<<" | "<<board[4]<<" | "<<board[5]<< "\n";
+        cout << " --------------------------------"<< "\n";
+        cout << "  "<<board[6]<<" | "<<board[7]<<" | "<<board[8]<< "\n" << "\n";
+    };
+
+    void player_1_turn(){
+
+        player_1_prompt(); //player picks spot
+        display_board(); //no need to redeclare a variable or a function if already declared
+    };
+  
+
+    void player_2_turn(){
+
+        player_2_prompt();
+        display_board();
+    };
+
+
+    void check_end_game(){
+   
+        for(int x = 0; x <9; x++){
+
+            if(board[x] == 'X' || board[x] == 'O'){
+
+                pieces_on_board = pieces_on_board + 1;
+            }
+ 
+        }
+
+        if(pieces_on_board > 8){
+            logic();
+        }
+      
+    };
+    void game_start(){
+
+        clear_screen();
+
+        while(!game_over){
+            
+            greeting();
+            display_board();
+            player_1_turn();
+            check_end_game();
+            player_2_turn();
+            check_end_game();
+        }
+    };
+    
+
+    bool did_anyone_win(){
+        WinP1();
+        WinP2();
+        tie_check();
+
+        if(player_1_wins == true || player_2_wins == true){
+            logic();
+        }
+    };
+
+
+    void WinP1(){
+
+            if(board[0] == 'X' && board[1] == 'X' && board[2] == 'X'){ 
+                // across          x x x
+                            //     ' ' '         
+                 //                ' ' '   
+                 player_1_wins_check = true;    
+                
+                
+            }
+            if(board[3] == 'X' && board[4] == 'X' && board[5] == 'X'){ 
+                // across          ' ' '
+                //                 x x x        
+                //                 ' ' '    
+                 player_1_wins_check = true;      
+                
+            }
+            if(board[6] == 'X' && board[7] == 'X' && board[8] == 'X'){ 
+                // across          ' ' '
+                //                 ' ' '         
+                //                 x x x      
+                 player_1_wins_check = true;    
+                
+            }
+            if(board[0] == 'X' && board[3] == 'X' && board[6] == 'X'){ 
+                // across down     x ' '  
+                //                 x ' '         
+                //                 x ' '     
+                 player_1_wins_check = true; 
+                
+            }
+            if(board[1] == 'X' && board[4] == 'X' && board[7] == 'X'){ 
+                // across down     ' x '  
+                //                 ' x '         
+                //                 ' x '     
+                 player_1_wins_check = true; 
+                
+            }
+            
+            if(board[2] == 'X' && board[5] == 'X' && board[8] == 'X'){ 
+                // across down     ' ' x  
+                //                 ' ' x        
+                //                 ' ' x     
+                 player_1_wins_check = true;
+                
+            }
+            if(board[0] == 'X' && board[4] == 'X' && board[8] == 'X'){ 
+                ///diagonally      x ' '
+                //                 ' x '
+                 //                ' ' x
+                 player_1_wins_check = true;
+                
+            }
+            if(board[2] == 'X' && board[4] == 'X' && board[6] == 'X'){ 
+                //diagnollay       ' ' x
+                //                 ' x '
+                //                 x ' ' 
+                 player_1_wins_check = true;
+                
+            }
+            
+            if(player_1_wins_check == true){
+                player_1_wins = true;
+            }
+            
+        }
+    
+
+    void WinP2(){
+
+            if(board[0] == 'O' && board[1] == 'O' && board[2] == 'O'){ 
+                // across          o o o
+                            //     ' ' '         
+                 //                ' ' '   
+                 player_2_wins_check = true;    
+                
+                
+            }
+            if(board[3] == 'O' && board[4] == 'O' && board[5] == 'O'){ 
+                // across          ' ' '
+                //                 o o o        
+                //                 ' ' '    
+                 player_2_wins_check = true;      
+                
+            }
+            if(board[6] == 'O' && board[7] == 'O' && board[8] == 'O'){ 
+                // across          ' ' '
+                //                 ' ' '         
+                //                 o o o      
+                 player_2_wins_check = true;    
+                
+            }
+            if(board[0] == 'O' && board[3] == 'O' && board[6] == 'O'){ 
+                // across down     o ' '  
+                //                 o ' '         
+                //                 o ' '     
+                 player_2_wins_check = true; 
+                
+            }
+            if(board[1] == 'O' && board[4] == 'O' && board[7] == 'O'){ 
+                // across down     ' o '  
+                //                 ' o '         
+                //                 ' o '     
+                 player_2_wins_check = true; 
+                
+            }
+            
+            if(board[2] == 'O' && board[5] == 'O' && board[8] == 'O'){ 
+                // across down     ' ' o  
+                //                 ' ' o        
+                //                 ' ' o     
+                 player_2_wins_check = true;
+                
+            }
+            if(board[0] == 'O' && board[4] == 'O' && board[8] == 'O'){
+                 ///diagonally     o ' '
+                //                 ' o '
+                 //                ' ' o
+                 player_2_wins_check = true;
+                
+            }
+            if(board[2] == 'O' && board[4] == 'O' && board[6] == 'O'){ 
+                 player_2_wins_check = true;
+                
+            }
+            
+            if (player_2_wins_check == true){
+                player_2_wins = true;
+            }
+    }
+
+    
+    
+    void tie_check(){
+        if(pieces_on_board == 9){
+
+    
+            if(!player_1_wins_check && !player_2_wins_check){
+                tie = true;
+            
+            }
+        }
+    };
+
+    void logic(){
+        
+       
+        if (player_1_wins == true){
+            cout << "Player 1 wins!" << "\n";
+            cout << "GAME OVER" << "\n";
+            clear_screen();
+            pieces_on_board = 0;
+            player_1_wins = false;
+            player_1_wins_check = false;
+        }
+        
+        if (player_2_wins == true){
+            cout << "Player 2 wins!" << "\n";
+            cout << "GAME OVER" << "\n";
+            clear_screen();
+            pieces_on_board = 0;
+            player_2_wins = false;
+            player_2_wins_check = false;
+        }
+        
+        if (tie == true){
+            cout << "It's a tie!" << "\n";
+            cout << "GAME OVER" << "\n";
+            clear_screen();
+            pieces_on_board = 0;
+            tie = false;
+        }
+    }
+
+};
+
+int main(){
+    ttt tic_tac_toe;
+    tic_tac_toe.game_start();
+    //big::small smallobj;
+    //cout<< smallobj.y;
+}
+
+
